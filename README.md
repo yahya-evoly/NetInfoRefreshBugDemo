@@ -23,31 +23,6 @@ This app provides a simple interface to demonstrate how NetInfo handles internet
 1. Clone the repository
 2. Install dependencies:
 
-# NetInfo Refresh Bug Demo
-
-A minimal reproduction app demonstrating issues with `@react-native-community/netinfo`'s refresh functionality in React Native.
-
-## Description
-
-This app provides a simple interface to demonstrate how NetInfo handles internet reachability checks. It includes:
-
-- Real-time display of internet connection status
-- Manual refresh button to test NetInfo's refresh functionality
-- Custom NetInfo configuration with intentionally failing reachability URL
-
-## Setup
-
-### Prerequisites
-
-- Node.js
-- Expo CLI
-- iOS Simulator or Android Emulator (for mobile testing)
-
-### Installation
-
-1. Clone the repository
-2. Install dependencies:
-
 ```bash
 yarn
 ```
