@@ -1,91 +1,59 @@
-import { StatusBar } from "expo-status-bar";
+// Import necessary dependencies
 import { StyleSheet, Text, View } from "react-native";
 import NetInfo from "@react-native-community/netinfo";
 import { useState, useEffect } from "react";
 import { Button } from "react-native";
-// Configure NetInfo
+
+// Configure NetInfo with specific settings to demonstrate the issue
 NetInfo.configure({
-  reachabilityUrl: "https://example.com/fail", // Use a URL that can fail
-  reachabilityLongTimeout: 30 * 1000, // 30s
-  reachabilityShortTimeout: 30 * 1000, // 30s
-  reachabilityRequestTimeout: 1 * 1000, // 1s
-  useNativeReachability: false,
-  reachabilityMethod: "GET",
+  reachabilityUrl: "https://example.com/fail", // Intentionally using a failing URL
+  reachabilityLongTimeout: 30 * 1000, // How often to check when app is in foreground
+  reachabilityShortTimeout: 30 * 1000, // How often to check when app is in background
+  reachabilityRequestTimeout: 1 * 1000, // How long to wait for each check
+  useNativeReachability: false, // Using custom implementation instead of native
+  reachabilityMethod: "GET", // HTTP method for reachability checks
 });
 
 export default function App() {
+  // Track online status using state
   const [isOnline, setIsOnline] = useState(false);
+
+  // Set up NetInfo listener to monitor internet connectivity
   useEffect(() => {
     const unsubscribe = NetInfo.addEventListener((state) => {
       setIsOnline(!!state.isInternetReachable);
     });
+    // Clean up listener when component unmounts
     return unsubscribe;
   }, []);
+
   return (
     <View style={styles.container}>
-      <View style={styles.statusContainer}>
-        <Text style={styles.statusText}>
-          is Internet Reachable:{" "}
-          <Text
-            style={[
-              styles.statusValue,
-              isOnline ? styles.online : styles.offline,
-            ]}
-          >
-            {isOnline ? "Yes" : "No"}
-          </Text>
+      {/* Display current connection status */}
+      <Text>
+        is Internet Reachable:{" "}
+        <Text
+          style={{
+            color: isOnline ? "green" : "red",
+            fontWeight: "bold",
+            fontSize: 20,
+          }}
+        >
+          {isOnline ? "Yes" : "No"}
         </Text>
-      </View>
-      <View style={styles.buttonContainer}>
-        <Button
-          title="NetInfo.refresh()"
-          onPress={() => NetInfo.refresh()}
-          color="#2196F3"
-        />
-      </View>
-      <StatusBar style="auto" />
+      </Text>
+      {/* Manual refresh button for testing */}
+      <Button title="NetInfo.refresh()" onPress={() => NetInfo.refresh()} />
     </View>
   );
 }
 
+// Styles for layout
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f5f5f5",
     alignItems: "center",
     justifyContent: "center",
-    padding: 20,
-  },
-  statusContainer: {
-    backgroundColor: "white",
-    padding: 20,
-    borderRadius: 10,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-    marginBottom: 20,
-  },
-  statusText: {
-    fontSize: 18,
-    fontWeight: "500",
-  },
-  statusValue: {
-    fontWeight: "bold",
-  },
-  online: {
-    color: "#4CAF50",
-  },
-  offline: {
-    color: "#f44336",
-  },
-  buttonContainer: {
-    marginTop: 20,
-    width: "80%",
-    maxWidth: 300,
+    gap: 20,
   },
 });
